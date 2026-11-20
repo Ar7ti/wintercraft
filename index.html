@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WinterCraft: как зайти</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: friendly, clear, a little playful - a note from a friend who runs the server
+   IDEA: a winter night server-list card + a quest log of steps
+   PICTURE: the server's snowy isometric block under a starry sky, snow falling
+   COLOUR and TYPE: night navy ground, ice blue, snow white, warm torch-orange accent; Pixelify Sans titles, Rubik body
+   LAYOUT: hero with block + address card, then numbered quest steps, then map/rules/mods strip */
+:root{color-scheme:dark;--bg:#0b1b33;--bg2:#10264a;--ink:#eef6ff;--mut:#a9c3e3;--ice:#8fd8ff;--blue:#3d8eff;--torch:#ffa94d;--card:#132e57;--line:#24467a}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Rubik,system-ui,sans-serif;overflow-x:clip}
+a{color:var(--ice)}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
+.wrap{max-width:1100px;margin:0 auto}
+h1,h2,h3{font-family:"Pixelify Sans",Rubik,sans-serif;line-height:1.08;margin:0;text-wrap:balance}
+h1{font-size:clamp(36px,6vw,56px);background:linear-gradient(90deg,#c9f0ff,#3d8eff);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:clamp(26px,3.4vw,36px);margin-bottom:18px}
+h3{font-size:22px}
+.hero{position:relative;background:radial-gradient(120% 90% at 70% 0%,#1d4c8f 0%,#0b1b33 70%);overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:center;position:relative;z-index:1}
+.lead{color:var(--mut);font-size:18px;max-width:34em;margin:14px 0 22px}
+.addr{background:rgba(10,24,48,.75);border:2px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.addr .lbl{font-size:13px;color:var(--mut);width:100%}
+.addr code{font:600 clamp(18px,2.6vw,24px)/1.2 "Pixelify Sans",monospace;color:#fff;overflow-wrap:anywhere;flex:1}
+button{font:inherit;cursor:pointer;min-height:44px;border-radius:10px;border:0;padding:0 18px;font-weight:500}
+.copy{background:var(--torch);color:#2a1300}
+.copy:focus-visible,.lang button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;font-size:14px;color:var(--mut)}
+.meta span{background:rgba(143,216,255,.1);border:1px solid var(--line);padding:4px 10px;border-radius:99px}
+.art{aspect-ratio:1;max-width:420px;width:100%;justify-self:center}
+.lang{position:absolute;top:14px;right:max(5vw,16px);z-index:2;display:flex;gap:6px}
+.lang button{background:rgba(255,255,255,.08);color:var(--ink);min-height:36px;padding:0 12px}
+.lang button[aria-pressed=true]{background:var(--ice);color:#06213f}
+#snow{position:absolute;inset:0;pointer-events:none}
+.steps{display:grid;gap:16px;counter-reset:s}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px 20px 74px;position:relative}
+.step::before{counter-increment:s;content:counter(s);position:absolute;left:20px;top:18px;width:38px;height:38px;border-radius:10px;background:var(--blue);display:grid;place-items:center;font:700 20px "Pixelify Sans",sans-serif}
+.step p{margin:8px 0 0;color:var(--mut)}
+.step ol,.step ul{margin:10px 0 0;padding-left:20px;color:var(--ink)}
+.step li{margin:4px 0}
+.opt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:12px}
+.opt>div{background:rgba(0,0,0,.18);border-radius:12px;padding:14px 16px}
+.opt b{color:var(--torch)}
+kbd,.k{background:#0b1b33;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:14px;white-space:nowrap}
+.tip{border-left:4px solid var(--torch);background:rgba(255,169,77,.08);padding:12px 16px;border-radius:0 10px 10px 0;margin-top:16px;color:var(--ink)}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.box{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:20px}
+.box p,.box li{color:var(--mut)}
+.box ul{padding-left:18px;margin:8px 0 0}
+footer{color:var(--mut);font-size:14px;text-align:center;padding:28px 16px 40px}
+[data-l=en] .ru,[data-l=ru] .en{display:none}
+@media(max-width:820px){.grid3{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:700px){.hero .wrap{grid-template-columns:minmax(0,1fr)}.art{max-width:260px;order:-1}.opt{grid-template-columns:minmax(0,1fr)}.step{padding-left:20px;padding-top:66px}}
+@media(prefers-reduced-motion:reduce){#snow{display:none}}
+</style>
+</head>
+<body data-l="ru">
+<section class="hero band">
+  <canvas id="snow"></canvas>
+  <div class="lang" role="group" aria-label="Language">
+    <button id="bru" aria-pressed="true">RU</button><button id="ben" aria-pressed="false">EN</button>
+  </div>
+  <div class="wrap">
+    <div>
+      <h1>❄ WinterCraft ❄</h1>
+      <p class="lead ru">Наш SMP-сервер на Minecraft 26.3. Моды скачиваются сами, когда заходишь, — нужно только один раз поставить Fabric и AutoModpack. Это минут 5.</p>
+      <p class="lead en">Our SMP server on Minecraft 26.3. Mods download automatically when you join — you only need to set up Fabric and AutoModpack once. Takes about 5 minutes.</p>
+      <div class="addr">
+        <span class="lbl ru">Адрес сервера</span><span class="lbl en">Server address</span>
+        <code id="ip">wintercraft.playit.plus</code>
+        <button class="copy" id="cp"><span class="ru">Копировать</span><span class="en">Copy</span></button>
+      </div>
+      <div class="meta"><span>Java 26.3</span><span>Fabric</span><span class="ru">до 10 игроков</span><span class="en">up to 10 players</span><span class="ru">сервер в Европе</span><span class="en">hosted in Europe</span></div>
+    </div>
+    <svg class="art" viewBox="0 0 64 64" shape-rendering="crispEdges" aria-hidden="true">
+      <defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12285a"/><stop offset="1" stop-color="#2b5aa8"/></linearGradient></defs>
+      <rect width="64" height="64" rx="6" fill="url(#sk)"/>
+      <g fill="#dceeff" id="stars"></g>
+      <polygon points="32,14 52,24 32,34 12,24" fill="#eef6ff"/>
+      <polygon points="12,24 32,34 32,56 12,46" fill="#7a5638"/>
+      <polygon points="32,34 52,24 52,46 32,56" fill="#5d4029"/>
+      <polygon points="12,24 32,34 32,39 12,29" fill="#d6e7f7"/>
+      <polygon points="32,34 52,24 52,29 32,39" fill="#b5cbe2"/>
+      <g fill="#8fd8ff"><rect x="27" y="23" width="11" height="1"/><rect x="32" y="20" width="1" height="7"/><rect x="29" y="21" width="1" height="1"/><rect x="35" y="21" width="1" height="1"/><rect x="29" y="25" width="1" height="1"/><rect x="35" y="25" width="1" height="1"/></g>
+      <g id="dirt"></g>
+    </svg>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2 class="ru">Как зайти — 4 шага</h2><h2 class="en">How to join — 4 steps</h2>
+    <div class="steps">
+      <div class="step">
+        <h3 class="ru">Скинь Кириллу свой ник</h3><h3 class="en">Send Kirill your username</h3>
+        <p class="ru">Сервер только для своих (whitelist). Напиши Кириллу ник из Minecraft Java — он добавит тебя.</p>
+        <p class="en">The server is whitelisted. Send Kirill your Minecraft Java username so he can add you.</p>
+      </div>
+      <div class="step">
+        <h3 class="ru">Поставь Fabric 26.3 и AutoModpack</h3><h3 class="en">Install Fabric 26.3 and AutoModpack</h3>
+        <p class="ru">Выбери один из двух способов:</p><p class="en">Pick one of two ways:</p>
+        <div class="opt">
+          <div>
+            <b class="ru">А. Modrinth App (проще)</b><b class="en">A. Modrinth App (easier)</b>
+            <ol class="ru"><li>Скачай <a href="https://modrinth.com/app">Modrinth App</a> и войди в аккаунт Microsoft.</li><li><span class="k">+</span> Create instance → версия <b>26.3</b>, загрузчик <b>Fabric</b>.</li><li>В этой сборке: Add content → найди <b>AutoModpack</b> → Install. Если не видно версии под 26.3 — включи показ бета-версий.</li><li>Нажми Play.</li></ol>
+            <ol class="en"><li>Get the <a href="https://modrinth.com/app">Modrinth App</a> and sign in with Microsoft.</li><li><span class="k">+</span> Create instance → version <b>26.3</b>, loader <b>Fabric</b>.</li><li>In that instance: Add content → search <b>AutoModpack</b> → Install. If no 26.3 version shows, enable beta versions.</li><li>Press Play.</li></ol>
+          </div>
+          <div>
+            <b class="ru">Б. Обычный лаунчер</b><b class="en">B. Official launcher</b>
+            <ol class="ru"><li>Скачай <a href="https://fabricmc.net/use/installer/">Fabric Installer</a>, выбери Client → <b>26.3</b> → Install.</li><li>Скачай AutoModpack для 26.3 со <a href="https://modrinth.com/mod/automodpack/versions">страницы версий</a> (файл <span class="k">.jar</span>).</li><li>Нажми <kbd>Win</kbd>+<kbd>R</kbd>, вставь <span class="k">%appdata%\.minecraft\mods</span> и положи туда этот файл (если папки нет — создай).</li><li>В лаунчере запусти профиль <b>fabric-loader-26.3</b>.</li></ol>
+            <ol class="en"><li>Get the <a href="https://fabricmc.net/use/installer/">Fabric Installer</a>, choose Client → <b>26.3</b> → Install.</li><li>Download AutoModpack for 26.3 from the <a href="https://modrinth.com/mod/automodpack/versions">versions page</a> (a <span class="k">.jar</span> file).</li><li>Press <kbd>Win</kbd>+<kbd>R</kbd>, paste <span class="k">%appdata%\.minecraft\mods</span> and drop the file there (create the folder if missing).</li><li>Launch the <b>fabric-loader-26.3</b> profile.</li></ol>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <h3 class="ru">Добавь сервер и зайди</h3><h3 class="en">Add the server and join</h3>
+        <p class="ru">Сетевая игра → Добавить сервер → адрес <b>wintercraft.playit.plus</b> → Подключиться.</p>
+        <p class="en">Multiplayer → Add Server → address <b>wintercraft.playit.plus</b> → Join.</p>
+      </div>
+      <div class="step">
+        <h3 class="ru">Согласись скачать сборку</h3><h3 class="en">Accept the modpack download</h3>
+        <p class="ru">AutoModpack спросит, скачать ли моды сервера, — соглашайся. Игра перезапустится, потом снова заходи на сервер. Готово! Когда на сервере обновятся моды, у тебя они обновятся сами.</p>
+        <p class="en">AutoModpack will ask to download the server's mods — accept. The game restarts, then join again. Done! When the server's mods change, yours update automatically.</p>
+      </div>
+    </div>
+    <p class="tip ru">Если игра вылетает или тормозит, выдели ей больше памяти: 4 ГБ хватит. В Modrinth App это в настройках сборки, в обычном лаунчере — в настройках профиля (JVM-аргумент <span class="k">-Xmx4G</span>).</p>
+    <p class="tip en">If the game crashes or lags, give it more memory — 4 GB is enough. In Modrinth App it's in the instance settings; in the official launcher, profile settings (JVM argument <span class="k">-Xmx4G</span>).</p>
+  </div>
+</section>
+
+<section class="band" style="background:var(--bg2)">
+  <div class="wrap grid3">
+    <div class="box">
+      <h3 class="ru">Карта мира</h3><h3 class="en">World map</h3>
+      <p class="ru">3D-карта в браузере, видно игроков онлайн. В игре — команда <span class="k">/trigger map</span>.</p>
+      <p class="en">Live 3D map in your browser with online players. In game: <span class="k">/trigger map</span>.</p>
+      <p><a href="http://dedication-mighty.tun.ply.gg:44840">dedication-mighty.tun.ply.gg:44840</a></p>
+    </div>
+    <div class="box">
+      <h3 class="ru">Правила</h3><h3 class="en">Rules</h3>
+      <ul class="ru"><li>Не гриферить и не воровать.</li><li>Без читов, x-ray и дюпов.</li><li>Уважай всех, на любом языке.</li><li>Строй в 100+ блоках от чужих баз.</li><li>Без огромных лаг-ферм.</li></ul>
+      <ul class="en"><li>No griefing or stealing.</li><li>No cheats, x-ray or dupes.</li><li>Respect everyone, in any language.</li><li>Build 100+ blocks from others' bases.</li><li>No huge lag farms.</li></ul>
+      <p class="ru">Полностью: <span class="k">/trigger rules</span></p><p class="en">Full list: <span class="k">/trigger rules</span></p>
+    </div>
+    <div class="box">
+      <h3 class="ru">Что есть на сервере</h3><h3 class="en">What's on the server</h3>
+      <ul class="ru"><li><b>Farmer's Delight</b> — новые культуры, готовка и блюда.</li><li><b>Waystones</b> — камни телепорта между базами.</li><li>Могилы: вещи после смерти не пропадут.</li><li>Смайлики в чате: <span class="k">:heart:</span> <span class="k">:skull:</span> <span class="k">:gg:</span></li><li>Ночь пропускается, когда спит половина игроков.</li></ul>
+      <ul class="en"><li><b>Farmer's Delight</b> — new crops, cooking and meals.</li><li><b>Waystones</b> — teleport stones between bases.</li><li>Graves: you never lose items on death.</li><li>Chat emojis: <span class="k">:heart:</span> <span class="k">:skull:</span> <span class="k">:gg:</span></li><li>Night skips when half the players sleep.</li></ul>
+    </div>
+  </div>
+</section>
+<footer><span class="ru">WinterCraft · сервер Кирилла · вопросы — пиши Кириллу</span><span class="en">WinterCraft · Kirill's server · questions? message Kirill</span></footer>
+
+<script>
+{
+const body=document.body,bru=document.getElementById('bru'),ben=document.getElementById('ben');
+const setL=l=>{body.dataset.l=l;document.documentElement.lang=l;bru.setAttribute('aria-pressed',l==='ru');ben.setAttribute('aria-pressed',l==='en');try{localStorage.setItem('wc-lang',l)}catch(e){}};
+bru.onclick=()=>setL('ru');ben.onclick=()=>setL('en');
+let saved=null;try{saved=localStorage.getItem('wc-lang')}catch(e){}
+setL(saved||((navigator.language||'').startsWith('ru')?'ru':'en'));
+const cp=document.getElementById('cp');
+cp.onclick=async()=>{try{await navigator.clipboard.writeText('wintercraft.playit.plus');cp.innerHTML='✔';setTimeout(()=>cp.innerHTML='<span class="ru">Копировать</span><span class="en">Copy</span>',1500)}catch(e){const r=document.createRange();r.selectNodeContents(document.getElementById('ip'));const s=getSelection();s.removeAllRanges();s.addRange(r)}};
+// pixel stars + dirt texture
+let st='';const rnd=(a=>()=>(a=(a*16807)%2147483647)/2147483647)(7);
+for(let i=0;i<26;i++)st+=`<rect x="${Math.floor(rnd()*64)}" y="${Math.floor(rnd()*12)}" width="1" height="1" opacity="${(.5+rnd()*.5).toFixed(2)}"/>`;
+document.getElementById('stars').innerHTML=st;
+let dt='';for(let i=0;i<70;i++){const left=rnd()<.5;const x=left?12+Math.floor(rnd()*20):32+Math.floor(rnd()*20);const top=left?24+(x-12)/2+6:34-(x-32)/2+6;const y=Math.floor(top+rnd()*(left?16:16));dt+=`<rect x="${x}" y="${y}" width="1" height="1" fill="${rnd()<.5?'#8a6443':'#4c3420'}"/>`}
+document.getElementById('dirt').innerHTML=dt;
+// snow
+const c=document.getElementById('snow'),x=c.getContext('2d');let fl=[];
+const size=()=>{c.width=c.clientWidth;c.height=c.clientHeight;fl=Array.from({length:Math.min(90,c.width/12)},()=>({x:Math.random()*c.width,y:Math.random()*c.height,s:1+Math.random()*2.5,v:.3+Math.random()*.8}))};
+const ro=new ResizeObserver(size);ro.observe(c);
+const tick=()=>{x.clearRect(0,0,c.width,c.height);x.fillStyle='rgba(235,245,255,.8)';for(const f of fl){f.y+=f.v;f.x+=Math.sin(f.y/40)*.3;if(f.y>c.height){f.y=-4;f.x=Math.random()*c.width}x.fillRect(f.x,f.y,f.s,f.s)}requestAnimationFrame(tick)};
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches)tick();
+}
+</script>
+</body>
+</html>
